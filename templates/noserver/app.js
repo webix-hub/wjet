@@ -3,11 +3,11 @@
 */
 
 define([
-	"libs/webix-mvc-core/core",
-	"libs/webix-mvc-core/plugins/menu",<% if (user) { %>
-	"libs/webix-mvc-core/plugins/user",<% } %><% if (skins) { %>
-	"libs/webix-mvc-core/plugins/theme",<% } %><% if (langs) { %>
-	"libs/webix-mvc-core/plugins/locale"<% } %>
+	"libs/webix-jet-core/core",
+	"libs/webix-jet-core/plugins/menu",<% if (user) { %>
+	"libs/webix-jet-core/plugins/user",<% } %><% if (skins) { %>
+	"libs/webix-jet-core/plugins/theme",<% } %><% if (langs) { %>
+	"libs/webix-jet-core/plugins/locale"<% } %>
 ], function(
 	core, menu<% if (user) { %>, user<% } %><% if (skins) { %>, theme<% } %><% if (langs) { %>, locale<% } %>
 ){

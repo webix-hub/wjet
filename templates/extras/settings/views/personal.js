@@ -1,8 +1,8 @@
 define([
 	"app"<% if (user) { %>,
 	"models/user"<% } %><% if (langs) { %>,
-	"libs/webix-mvc-core/plugins/locale"<% } %><% if (skins) { %>,
-	"libs/webix-mvc-core/plugins/theme"<% } %>
+	"libs/webix-jet-core/plugins/locale"<% } %><% if (skins) { %>,
+	"libs/webix-jet-core/plugins/theme"<% } %>
 ],function(app<% if (user) { %>, users<% } %><% if (langs) { %>, locales<% } %><% if (skins) { %>, themes<% } %>){
 
 <% if (langs) { %>
