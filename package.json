@@ -1,0 +1,24 @@
+{
+  "name": "wjet",
+  "version": "0.1.0",
+  "description": "Command line tool for Webix Jet",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "webix",
+    "cli"
+  ],
+  "author": "Maksim Kozhukh",
+  "license": "MIT",
+  "preferGlobal": true,
+  "bin": "./wjet.js",
+  "dependencies": {
+    "bower": "^1.6.3",
+    "commander": "^2.9.0",
+    "event-stream": "^3.3.2",
+    "inquirer": "^0.10.1",
+    "lodash.template": "^3.6.2",
+    "vinyl-fs": "^2.2.1"
+  }
+}
