@@ -12,7 +12,7 @@
   ],
   "dependencies": {
     "almond": "~0.3.1",
-    "webix": "~2.4.7",
+    "webix": ">3.0.0",
     "routie": "~0.3.2",
     "requirejs": "~2.1.18",
     "webix-jet-core": "~0.1.0",
