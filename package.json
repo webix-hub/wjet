@@ -1,6 +1,6 @@
 {
   "name": "wjet",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Command line tool for Webix Jet",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
