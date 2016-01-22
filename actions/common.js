@@ -23,7 +23,7 @@ runner.prototype = {
 			handlers.push(this.run(this.order[i].src, this.order[i].opt, dest, cfg));
 
 		es.merge(handlers).on("end", function(){
-			console.log("Insaling dependencies...");
+			console.log("Installing dependencies...");
 			bower.commands.install();
 			console.log("done")
 		});
