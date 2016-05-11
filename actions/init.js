@@ -2,7 +2,7 @@ var common = require("./common.js");
 
 var notempty = function(a){ return !!a; };
 var dashed   = function(a){
-  return a.replace(/[^a-zA-Z0-9]+/g," ").trim().replace(" ","-");
+  return a.replace(/[^a-zA-Z0-9]+/g," ").trim().replace(" ","-").toLowerCase();
 };
 var hasServer = function(a){ return a.server && a.server != "None"; };
 var hasDB = function(a){ return a.db && a.db != "None"; };

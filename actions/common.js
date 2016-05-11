@@ -24,8 +24,11 @@ runner.prototype = {
 
 		es.merge(handlers).on("end", function(){
 			console.log("Installing dependencies...");
-			bower.commands.install();
-			console.log("done")
+			bower.commands.install().on('end', function(){
+				require("child_process").exec("npm install", function(){
+					console.log("done")
+				});
+			});
 		});
 	},
 	run:function(src, opt, dest, cfg){
