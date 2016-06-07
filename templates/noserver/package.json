@@ -4,7 +4,9 @@
   "description": "${appName}",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build" : "gulp build",
+    "build-pro" : "gulp build --pro",
+    "test"  : "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
     "webix"
@@ -13,6 +15,7 @@
     "event-stream": "^3.3.1",
     "glob": "^5.0.13",
     "gulp": "^3.9.0",
+    "gulp-util":"^3.0.7",
     "gulp-concat": "^2.6.0",
     "gulp-if": "^1.2.5",
     "gulp-jshint": "^1.11.2",
