@@ -69,6 +69,10 @@
 	border-radius: 0px;
 }
 
+.webix_menu .webix_icon {
+    line-height: inherit;
+}
+
 /*left side menu*/
 .app-left-panel,
 .app-left-panel .webix_view,

@@ -5,7 +5,7 @@ wjet => Webix Jet cli tools
 [![Join the chat at https://gitter.im/webix-hub/webix](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/webix-hub/webix) 
 
 
-### Hot to install
+### How to install
 
 ```
 npm install -g wjet
