@@ -1,8 +1,8 @@
-wjet => Webix Jet cli tools
+wjet => Webix Jet CLI tools
 ============================
 
+
 [![npm version](https://badge.fury.io/js/wjet.svg)](https://badge.fury.io/js/wjet)
-[![Join the chat at https://gitter.im/webix-hub/webix](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/webix-hub/webix) 
 
 
 ### How to install

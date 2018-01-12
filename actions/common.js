@@ -1,7 +1,6 @@
 var fs = require('vinyl-fs');
 var es = require("event-stream");
 var tmpl = require("lodash.template");
-var bower = require("bower");
 
 var templates = require("fs").realpathSync(__dirname+"/../templates");
 function template(file, cb) {
@@ -23,12 +22,7 @@ runner.prototype = {
 			handlers.push(this.run(this.order[i].src, this.order[i].opt, dest, cfg));
 
 		es.merge(handlers).on("end", function(){
-			console.log("Installing dependencies...");
-			bower.commands.install().on('end', function(){
-				require("child_process").exec("npm install", function(){
-					console.log("done")
-				});
-			});
+			console.log("\nDone\n\nRun `npm install` and `npm run start` to start the app.")
 		});
 	},
 	run:function(src, opt, dest, cfg){
