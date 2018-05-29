@@ -6,19 +6,18 @@ function run(inq){
 		// Get app name from arguments by default
 		{ type: 'input', name: 'appName', message: 'Give your app a name',
 			"default": "The App!" },
-		{ type: 'list', name: 'typescript', message: 'Do you want to use TypeScript ?',
-			"default": "No", choices:["Yes", "No"]},
-		// { type: 'list', name: 'less', message: 'CSS pre-processor ?',
-		// 	"default": "No", choices:["No", "Less", "Sass"] },
-		// { type: 'list', name: 'template', message: 'External template engine ?',
-		// 	"default": "No", choices:["No", "Handlebars"] },
-		// { type: 'list', name: 'skin', message: 'Default app skin ?',
-		// 	"default": "Flat", choices:["Flat", "Compact", "Material"] },
+		{ type: 'confirm', name: 'customTools', message: 'App will use Javascript (ES6) and CSS\n  Do you need advanced preprocessing ( Typescript, Sass, Handlebars ) ?',
+			"default": false },
+		{ type: 'list', name: 'less', message: 'CSS pre-processor ?',
+		 	"default": "No", choices:["No", "Less", "Sass"], when: a => a.customTools },
+		{ type: 'list', name: 'template', message: 'External template engine ?',
+		 	"default": "No", choices:["No", "Handlebars"], when: a => a.customTools  },
+		{ type: 'list', name: 'skin', message: 'Default app skin ?',
+		 	"default": "Flat", choices:["Flat", "Compact", "Material"], when: a => a.customTools },
 		{ type: 'list', name: 'edition', message: 'GPL or Commercial version of Webix UI ?',
-		 	"default": "GPL", choices:["GPL", "Commercial"] },
-		// { type: 'list', name: 'backend', message: 'Backend ?',
-		// 	"default": "None", choices:["None", "PHP", "NodeJS", ".Net"] },
-
+			 "default": "GPL", choices:["GPL", "Commercial"] },
+		{ type: 'confirm', name: 'customFeatures', message: 'Do you need extra features such as Authentication, Localization, etc ?',
+			 "default": false }
 	]).then(res => {
 
 		res.appID = res.appName.replace(/[^a-z0-9]+/gi,"-").replace(/-$|^-/, "").toLowerCase();
