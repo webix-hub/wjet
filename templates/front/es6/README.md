@@ -1,4 +1,4 @@
-Webix Jet Demo App
+{{appName}}
 ===================
 
 ### How to run
@@ -24,8 +24,3 @@ npm run build
 ```
 
 After that you can copy the "codebase" folder to the production server
-
-
-### License
-
-MIT

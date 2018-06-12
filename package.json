@@ -16,8 +16,8 @@
   "dependencies": {
     "commander": "^2.15.1",
     "event-stream": "^3.3.4",
+    "handlebars": "^4.0.11",
     "inquirer": "^5.2.0",
-    "lodash.template": "^4.4.0",
     "vinyl-fs": "^3.0.3"
   }
 }

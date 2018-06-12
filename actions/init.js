@@ -1,43 +1,53 @@
-var common = require("./common.js");
+const vfs = require("vinyl-fs");
+const es = require("event-stream");
 
-function run(inq){
+var starter = require("./starter");
 
-	inq.prompt([
+async function run(inq){
+
+	res = await inq.prompt([
 		// Get app name from arguments by default
 		{ type: 'input', name: 'appName', message: 'Give your app a name',
 			"default": "The App!" },
 		{ type: 'confirm', name: 'customTools', message: 'App will use Javascript (ES6) and CSS\n  Do you need advanced preprocessing ( Typescript, Sass, Handlebars ) ?',
 			"default": false },
-		{ type: 'list', name: 'less', message: 'CSS pre-processor ?',
+		{ type: 'list', name: 'css', message: 'CSS pre-processor ?',
 		 	"default": "No", choices:["No", "Less", "Sass"], when: a => a.customTools },
-		{ type: 'list', name: 'template', message: 'External template engine ?',
-		 	"default": "No", choices:["No", "Handlebars"], when: a => a.customTools  },
+		{ type: 'confirm', name: 'handlebars', message: 'Use Handlebars for templating ?',
+		 	"default": false, when: a => a.customTools  },
+		{ type: 'confirm', name: 'typescript', message: 'Use Typescript ?',
+		 	"default": false, when: a => a.customTools },
 		{ type: 'list', name: 'skin', message: 'Default app skin ?',
-		 	"default": "Flat", choices:["Flat", "Compact", "Material"], when: a => a.customTools },
+		 	"default": "Flat", choices:["Flat", "Compact"] },
 		{ type: 'list', name: 'edition', message: 'GPL or Commercial version of Webix UI ?',
-			 "default": "GPL", choices:["GPL", "Commercial"] },
-		{ type: 'confirm', name: 'customFeatures', message: 'Do you need extra features such as Authentication, Localization, etc ?',
-			 "default": false }
-	]).then(res => {
+			 "default": "GPL", choices:["GPL", "Commercial"] }
+	]);
 
+	try {
 		res.appID = res.appName.replace(/[^a-z0-9]+/gi,"-").replace(/-$|^-/, "").toLowerCase();
-		res.fileExt = res.typescript === "Yes" ? "ts" : "js";
+		res.fileExt = res.typescript ? "ts" : "js";
+		res.skin = skins[res.skin];
+
+		res.css = (res.css||"no").toLowerCase();
+		if (res.css === "no") res.css = "css";
+		res.less = res.css === "Less";
+		res.sass = res.css === "Sass";
+
 		res.webixPath = res.edition === "GPL" ? "node_modules/webix/" : "node_modules/@xbs/webix-pro/";
+		res.webixNPM = res.edition === "GPL" ? "webix" : "@xbs/webix-pro";
 
-		var ctp = common.files();
-		ctp.add("/front/package.json");
-		ctp.add("/front/webpack.config.js");
-
-		if (res.typescript === "Yes")
-			ctp.add("/front/typescript/**", { dot: true });
-		else
-			ctp.add("/front/es6/**", { dot: true });
-	
-		ctp.save("./", res);
-
-	}).catch(e => console.log(e));
+		var files = starter.stream(res);
+		files.pipe(vfs.dest("./"));
+	} catch(e) {
+		console.log(e);
+	}
 
 }
+
+const skins = {
+	"Flat" : "webix.css",
+	"Compact" : "skins/compact.css"
+};
 
 module.exports = {
 	run

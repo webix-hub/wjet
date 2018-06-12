@@ -1,4 +1,4 @@
-${appName}
+Webix Jet Demo App
 ===================
 
 ### How to run

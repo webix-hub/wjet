@@ -5,20 +5,13 @@ module.exports = function(env) {
 
 	var pack = require("./package.json");
 	var ExtractTextPlugin = require("extract-text-webpack-plugin");
+
 	var production = !!(env && env.production === "true");
-<% if (typescript === "No"){ %>
-	var babelSettings = {
-		extends: path.join(__dirname, '/.babelrc')
-	};
-	var loader= "babel-loader?" + JSON.stringify(babelSettings);
-	var extensions = [".js"];
-<% } else { %>
-	var loader = "ts-loader";
-	var extensions = [".ts", ".js"];
-<% } %>
+	var asmodule = !!(env && env.module === "true");
+	var standalone = !!(env && env.standalone === "true");
 
 	var config = {
-		entry: "./sources/myapp.${fileExt}",
+		entry: "./sources/myapp.ts",
 		output: {
 			path: path.join(__dirname, "codebase"),
 			publicPath:"/codebase/",
@@ -28,8 +21,8 @@ module.exports = function(env) {
 		module: {
 			rules: [
 				{
-					loader,
-					test:  /\.${fileExt}$/
+					test: /\.ts$/,
+					loader: "ts-loader"
 				},
 				{
 					test: /\.(svg|png|jpg|gif)$/,
@@ -42,23 +35,20 @@ module.exports = function(env) {
 			]
 		},
 		resolve: {
-			extensions,
+			extensions: [".ts", ".js"],
 			modules: ["./sources", "node_modules"],
 			alias:{
 				"jet-views":path.resolve(__dirname, "sources/views"),
 				"jet-locales":path.resolve(__dirname, "sources/locales")
 			}
 		},
-		devServer: {
-			open: true,
-			openPage: "index.html"
-		},
 		plugins: [
 			new ExtractTextPlugin("./myapp.css"),
 			new webpack.DefinePlugin({
-				VERSION: '"'+pack.version+'"',
-				APPNAME: '"'+pack.name+'"',
-				PRODUCTION : production
+				VERSION: `"${pack.version}"`,
+				APPNAME: `"${pack.name}"`,
+				PRODUCTION : production,
+				BUILD_AS_MODULE : (asmodule || standalone)
 			})
 		]
 	};
@@ -69,6 +59,21 @@ module.exports = function(env) {
 				test: /\.js$/
 			})
 		);
+	}
+
+	if (asmodule){
+		if (!standalone){
+			config.externals = config.externals || {};
+			config.externals = [ "webix-jet" ];
+		}
+
+		const out = config.output;
+		const sub = standalone ? "full" : "module";
+
+		out.library = pack.name.replace(/[^a-z0-9]/gi, "");
+		out.libraryTarget= "umd";
+		out.path = path.join(__dirname, "dist", sub);
+		out.publicPath = "/dist/"+sub+"/";
 	}
 
 	return config;
