@@ -1,44 +1,65 @@
-var fs = require('vinyl-fs');
-var es = require("event-stream");
-var tmpl = require("lodash.template");
+const fs = require("fs");
+const path = require("path");
 
-var templates = require("fs").realpathSync(__dirname+"/../templates");
-function template(file, cb) {
+function replaceFile(name, mode, text){
+	name = "./sources/"+name;
 
-  file.contents = new Buffer()
-  cb(null, file);
-};
-
-function runner(){
-	this.order = [];
-}
-runner.prototype = {
-	add:function(src, opt){
-		this.order.push({ src:src, opt:opt });
-	},
-	save:function(dest, cfg){
-		var handlers = [];
-		for (var i=0; i<this.order.length; i++)
-			handlers.push(this.run(this.order[i].src, this.order[i].opt, dest, cfg));
-
-		es.merge(handlers).on("end", function(){
-			console.log("\nDone\n\nRun `npm install` and `npm run start` to start the app.")
-		});
-	},
-	run:function(src, opt, dest, cfg){
-		return fs.src(templates+src, opt)
-		.pipe(es.map(function(file, cb){
-			console.log(file.path);
-			if (file.contents)
-				file.contents = new Buffer( tmpl(file.contents.toString("utf8"))(cfg) );
-			cb(null, file);
-		}))
-		.pipe(fs.dest(dest));
+	let str = fs.readFileSync(name).toString("utf8");
+	const pos = str.indexOf("/*wjet::"+mode+"*/");
+	if (pos != -1){
+		str = str.substr(0, pos) + text + "\n"+str.substr(pos);
+		fs.writeFileSync(name, str);
 	}
-};
+}
+
+async function addPlugin(file, name){
+	addImport(file, "plugins", "webix-jet");
+
+	const plugin = `this.use(plugins.${name}, { model: session });`;
+	return replaceFile(file, "plugin", plugin);
+}
+
+async function addImport(file, name, from){
+	const line = `import ${name} from "${from}";\n`;
+
+	let str = fs.readFileSync(name).toString("utf8");
+	const pos = str.indexOf(line);
+	if (pos != -1){
+		str = line + str;
+		fs.writeFileSync(name, str);
+	}
+}
+
+async function addSettings(){
+
+}
+
+async function addMenu(){
+
+}
+
+async function addView(){
+
+}
+
+async function addFile(from, to){
+	const rootDir = path.resolve(__dirname+"/../templates");
+	return new Promise((resolve, reject) => {
+		fs.copyFile(path.join(rootDir, from), to, result => resolve());	
+	});
+	
+}
+
+async function addModel(){
+
+}
 
 module.exports = {
-	files:function(){
-		return new runner();
-	}
-};
+	addPlugin,
+	addSettings,
+	addMenu,
+	addView,
+	addFile,
+	addModel,
+	addImport
+}

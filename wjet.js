@@ -11,10 +11,10 @@ cmd.command('init')
 		require("./actions/init").run(inquirer);
 	});
 
-cmd.command('add <entity> <name>')
+cmd.command('add <entity>')
 	.description("add view, model, widget, feature")
-	.action(function(entity, name, cmd){
-
+	.action(function(entity, cmd){
+		require("./actions/add").run(inquirer);
 	});
 
 cmd.parse(process.argv)

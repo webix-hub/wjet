@@ -12,6 +12,8 @@ export default class MyApp extends JetApp{
 		};
 
 		super({ ...defaults, ...config });
+
+		/*wjet::plugin*/
 	}
 }
 
