@@ -31,15 +31,19 @@ function status(){
 
 function login(user, pass){
 	return new webix.promise((resolve, reject) => {
-		if (user === "admin" && pass === "1")
+		if (user === "admin" && pass === "1"){
+			webix.storage.local.put("wjet_user", { user:"admin" });
 			resolve({ user: "admin" });
-		else
+		} else
 			resolve(null);
 	});
 }
 
 function logout(){
-	webix.storage.local.remove("wjet_user");
+	return new webix.promise((resolve, reject) => {
+		webix.storage.local.remove("wjet_user");
+		resolve(null)
+	});
 }
 
 export default {

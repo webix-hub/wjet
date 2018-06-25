@@ -29,7 +29,13 @@ async function run(inq){
 			await common.addFile(
 				"front/features/auth/login.js",
 				"sources/views/login.js");
-			await common.addSettings("");
+			
+			await common.addUI("views/top.js",`
+		const logout = {
+			view:"button", label:"Logout",
+			click: () => this.show("/logout")
+		};`)
+			await common.addMarker("views/top.js", "Sidebar", ", logout");
 
 			message.push("login    = admin");
 			message.push("password = 1");
@@ -41,7 +47,7 @@ async function run(inq){
 			await common.addSettings();
 		}
 
-		console.log(message.join("\n"));
+		console.log(message.join("\n")+"\n");
 
 
 	} catch(e) {
@@ -49,11 +55,6 @@ async function run(inq){
 	}
 
 }
-
-const skins = {
-	"Flat" : "webix.css",
-	"Compact" : "skins/compact.css"
-};
 
 module.exports = {
 	run
