@@ -2,7 +2,7 @@ const fs = require("fs");
 const path = require("path");
 
 
-async function replaceAndSave(name, mode, text, after){
+function replaceAndSave(name, mode, text, after){
 	name = "./sources/"+name;
 
 	let str = fs.readFileSync(name).toString("utf8");
@@ -18,21 +18,26 @@ async function replaceAndSave(name, mode, text, after){
 		}
 	}
 }
-async function addMarker(name, mode, text, after){
+
+function addMarker(name, mode, text, after){
 	mode = "/*wjet::"+mode+"*/";
 	return replaceAndSave(name, mode, text, after);
 }
 
-async function addPlugin(file, name){
+function addPlugin(file, name, config){
 	addImport(file, "{plugins}", "webix-jet");
 
-	const plugin = `this.use(plugins.${name}, { model: session });`;
+	const plugin = `this.use(plugins.${name}, ${config});`;
 	return addMarker(file, "plugin", plugin);
 }
 
-async function addImport(file, name, from){
+function addImport(file, name, from){
 	file =  "./sources/" + file;
-	const line = `import ${name} from "${from}";\n`;
+	let line;
+	if (name)
+		line = `import ${name} from "${from}";\n`;
+	else
+		line = `import "${from}";\n`;
 
 	let str = fs.readFileSync(file).toString("utf8");
 	const pos = str.indexOf(line);
@@ -42,38 +47,65 @@ async function addImport(file, name, from){
 	}
 }
 
-async function addUI(file, code){
+function addUI(file, code){
 	replaceAndSave(file, "config(){", "\n"+code+"\n\n", true);
 }
 
-async function addSettings(){
-
+function addPackage(name){
+	const code = fs.readFileSync("./package.json").toString("utf8");
+	const json = JSON.parse(code);
+	if (!json.dependencies[name] && !json.devDependencies[name]){
+		json.dependencies[name] = "*";
+		fs.writeFileSync("./package.json", JSON.stringify(json, null, "  "));
+	}
 }
 
-async function addMenu(){
 
-}
-
-async function addView(){
-
-}
-
-async function addFile(from, to){
+function addFile(from, to){
 	const rootDir = path.resolve(__dirname+"/../templates");
-	return new Promise((resolve, reject) => {
-		fs.copyFile(path.join(rootDir, from), to, result => resolve());	
-	});
-	
+	fs.copyFileSync(path.join(rootDir, from), to);	
 }
 
-async function addModel(){
+function addView(name, content, init){
+	name = "./sources/"+name;
+	let str = `import {JetView} from "webix-jet";
 
+export default class MyView extends JetView{
+	config(){
+${content}
+	}
+	init(view){
+${init}
+	}
+}
+`;
+	fs.writeFileSync(name, str);
+}
+
+function addModel(name, mode, content){
+	name = "./sources/"+name;
+
+	let str;
+	if (mode === "plain"){
+		str = `
+export const data = ${content};
+`;
+	} else {
+		str = `
+export const data = new webix.DataCollection({
+	data:[
+		${content}
+	]
+});
+`;
+	}
+
+	fs.writeFileSync(name, str);
 }
 
 module.exports = {
 	addPlugin,
-	addSettings,
-	addMenu,
+	addPackage,
 	addView,
 	addFile,
 	addModel,

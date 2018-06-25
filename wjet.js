@@ -12,9 +12,14 @@ cmd.command('init')
 	});
 
 cmd.command('add <entity>')
-	.description("add view, model, widget, feature")
+	.description("add widget, feature")
 	.action(function(entity, cmd){
-		require("./actions/add").run(inquirer);
+		if (entity === "feature")
+			require("./actions/add-feature").run(inquirer);
+		else if (entity === "widget")
+			require("./actions/add-widget").run(inquirer);
+		else 
+			console.log("Sorry, I don't know how to add "+entity);
 	});
 
 cmd.parse(process.argv)

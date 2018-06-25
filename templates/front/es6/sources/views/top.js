@@ -15,6 +15,7 @@ export default class TopView extends JetView{
 			data:[
 				{ value:"DashBoard", id:"start", icon:"envelope-o" },
 				{ value:"Data",		 id:"data",  icon:"briefcase" },
+				{ value:"Settings",  id:"settings",  icon:"cogs" },
 				/*wjet::Menu*/
 			]
 		};

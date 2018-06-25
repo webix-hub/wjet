@@ -3,6 +3,8 @@ const es = require("event-stream");
 const bars = require("handlebars");
 const path = require("path");
 
+const c = require("./common");
+
 async function run(inq){
 
 	const res = await inq.prompt([
@@ -38,6 +40,9 @@ async function run(inq){
 		var files = stream(res);
 		files.pipe(vfs.dest("./"))
 			.on("end", function(){
+				if (res.handlebars)
+					c.addMarker("views/top.js", "Menu", "{ value:\"Info\", id:\"info\", icon:\"info\" },");
+
 				console.log(`
 Files are ready. run
 
