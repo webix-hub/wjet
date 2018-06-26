@@ -11,12 +11,31 @@ wjet => Webix Jet CLI tools
 npm install -g wjet
 ```
 
+or 
+
+```
+yarn global add wjet
+```
+
 ### How to use
 
+- Create new app
 
 ```
 mkdir myApp
 cd myApp
 wjet init
+```
+
+- Add feature
+
+```
+wjet add feature
+```
+
+- Add widget
+
+```
+wjet add widget
 ```
 
