@@ -2,7 +2,6 @@ const c = require("./common");
 
 async function run(inq){
 
-
 	const res = await inq.prompt([
 		{ type: 'list', name: 'feature', message: 'Select the feature',
 			"default": "Authentication", choices:["Authentication", "Localization"] }
@@ -24,7 +23,7 @@ async function run(inq){
 			c.addFile(
 				"front/features/auth/login.js",
 				"sources/views/login.js");
-			
+
 			c.addUI("views/top.js",`
 		const logout = {
 			view:"button", label:"Logout",
@@ -36,7 +35,7 @@ async function run(inq){
 			message.push("password = 1");
 		}
 
-		if (res.feature === "Localization"){
+		else if (res.feature === "Localization"){
 			c.addPlugin("app.js", "Locale", "{ lang: \"en\", \n\t\tstorage: webix.storage.prefix(this.config.id, webix.storage.local) }");
 			c.addUI("views/settings.js",`
 		const locale = this.app.getService("locale");

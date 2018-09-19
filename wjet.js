@@ -20,6 +20,8 @@ cmd.command('add <entity>')
 			require("./actions/add-widget").run(inquirer);
 		else if (entity === "model")
 			require("./actions/add-model").run(inquirer);
+		else if (entity === "view")
+			require("./actions/add-view").run(inquirer);
 		else 
 			console.log("Sorry, I don't know how to add "+entity);
 	});

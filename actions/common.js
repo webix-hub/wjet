@@ -77,8 +77,7 @@ ${content}
 	init(view){
 ${init}
 	}
-}
-`;
+}`;
 	fs.writeFileSync(name, str);
 }
 

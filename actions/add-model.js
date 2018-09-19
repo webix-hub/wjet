@@ -2,10 +2,9 @@ const c = require("./common");
 const configs = require("./helpers/configs");
 
 async function run(inq, widget){
+	const name = await require("./helpers/file-confirm").run(inq, "models");
 
 	const res = await inq.prompt([
-		{ type: 'input', name: 'fileName', message: 'Enter file name',
-			"default": "my_model", when: a => !a.fileName ||  a.fileName == "my_model" },
 		{ type: 'list', name: 'modelType', message: 'Which kind of model do you want to create',
 			"default": "Static ( js data )", choices:["Static ( js data )", "Data collection", "Proxy for server API"] },
 		{ type: 'input', name: 'modelName', message: 'Name your model',
@@ -13,9 +12,12 @@ async function run(inq, widget){
 		{ type: 'input', name: 'url', message: 'Model url',
 			"default": "data.php", when: a => a.modelType == "Proxy for server API" },
 	]);
+
+	res.modelFileName = name;
+
 	let message = [
 		"",
-		"Changes applied, refresh the app to see the new functionality.",
+		"Model successfully added.",
 		""
 	];
 
@@ -37,7 +39,7 @@ async function run(inq, widget){
 
 		let data = res.url || (widget && configs[widget].model ? configs[widget].model : "[]");
 
-		c.addModel(`models/${res.fileName}.js`, res.modelName, res.modelType, data);
+		c.addModel(`models/${res.modelFileName}.js`, res.modelName, res.modelType, data);
 
 		console.log(message.join("\n")+"\n");
 

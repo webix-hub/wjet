@@ -1,51 +1,38 @@
 const c = require("./common");
 
 async function run(inq, widget){
+	const name = await require("./helpers/file-confirm").run(inq, "views");
 
 	const res = await inq.prompt([
-		{ type: 'input', name: 'name', message: 'Name your view'},
-		{ type: 'list', name: 'modelType', message: 'which kind of view do you need ?',
-			"default": "Static ( js data )", choices:["Static ( js data )", "Data collection", "Proxy for server API"] },
-		{ type: 'input', name: 'modelName', message: 'Name your model',
-			"default": "data", when: a => a.modelType != "Proxy for server API" },
-
-		{ type: 'input', name: 'url', message: 'Model url',
-			"default": "data.php", when: a => a.modelType == "Proxy for server API" },
+		{ type: 'list', name: 'viewType', message: 'which kind of view do you need?', choices:
+			["Navigation with sub-elements", "Widget centric", "CRUD", "Data navigation"]
+		},
+		{ type: 'list', name: 'navType', message: 'Select the navigation type', choices:
+			["top menu", "sidebar", "tabbar"], when: a => a.viewType == "Navigation with sub-elements"
+		}
 	]);
-	let message = [
-		"",
-		"Changes applied, refresh the app to see the new functionality.",
-		""
-	];
+
+	res.name = name;
 
 	try {
-
-		let type;
-
-		switch (res.modelType) {
-			case "Static ( js data )":
-				res.modelType = "static";
+		switch (res.viewType) {
+			case "Widget centric":
+				require("./add-widget").run(inq, res.name);
 				break;
-			case "Data collection":
-				res.modelType = "collection";
+			case "Navigation with sub-elements":
+				require("./add-menu").run(inq, res.name, res.navType);
 				break;
-			case "Proxy for server API":
-				res.modelType = "proxy";
+			case "CRUD":
+				require("./add-crud").run(inq, res.name);
+				break;
+			case "Data navigation":
+				require("./add-data-navigation").run(inq, res.name);
 				break;
 		}
-
-		let data = res.url || (widget && configs[widget].model ? configs[widget].model : "[]");
-
-		c.addModel(`models/${res.fileName}.js`, res.modelName, res.modelType, data);
-
-		console.log(message.join("\n")+"\n");
-
 	} catch(e) {
 		console.log(e);
 	}
-
 	return res;
-
 }
 
 module.exports = {

@@ -1,12 +1,12 @@
 const config = require("./configs");
 const c = require("../common");
 
-module.exports = function(res, message){
+module.exports = function(res, viewName, message){
 	let values = config[res.widget];
 	let data = "";
 	let init = "";
 
-	if(res.modelType){ //TODO join
+	if(res.modelType){
 		if(values.dhx){
 			let loading = res.modelType == "proxy" ? 
 			`getData().then((data)=>{
@@ -34,14 +34,14 @@ module.exports = function(res, message){
 				${view}
 			},{}]`
 
-	c.addView(`views/${values.id}.js`,`
+	c.addView(`views/${viewName}.js`,`
 		return{
 			${view}
 		};`, init);
 
 	if(values.dhx){
 		c.addPackage(`@wbx/view-${values.id}`);
-		c.addImport(`views/${values.id}.js`, "", `@wbx/view-${values.id}`);
+		c.addImport(`views/${viewName}.js`, "", `@wbx/view-${values.id}`);
 	}
 	else
 		c.addMarker("app.js", "extra",`
@@ -50,8 +50,8 @@ module.exports = function(res, message){
 
 	if(res.modelType){
 		const modelName = res.modelType == "proxy" ? "{getData, saveData}" : `{${res.modelName}}`;
-		c.addImport(`views/${values.id}.js`, modelName, `models/${res.fileName}`);
+		c.addImport(`views/${viewName}.js`, modelName, `models/${res.modelFileName}`);
 	}
 
-	c.addMarker("views/top.js", "Menu", `{ value:"${values.value}", id:"${values.id}", icon:"${values.icon}" },`);
+	c.addMarker("views/top.js", "Menu", `{ value:"${viewName}", id:"${viewName || values.id}", icon:"${values.icon}" },`);
 }
