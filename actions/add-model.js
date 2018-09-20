@@ -39,7 +39,7 @@ async function run(inq, widget){
 
 		let data = res.url || (widget && configs[widget].model ? configs[widget].model : "[]");
 
-		c.addModel(`models/${res.modelFileName}.js`, res.modelName, res.modelType, data);
+		c.addModel(`models/${res.modelFileName}`, res.modelName, res.modelType, data);
 
 		console.log(message.join("\n")+"\n");
 

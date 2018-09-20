@@ -4,16 +4,17 @@ async function run(inq, res){
 	let allModels = [];
 
 	fs.readdirSync("./sources/models").forEach(file => {
-		allModels.push(file.slice(0, -3));
+		allModels.push(file);
 	})
 
 	const fileName = await inq.prompt([
 		{ type: 'list', name: 'modelName', message: 'Select model', choices: allModels },
 	]);
 
-	res.modelFileName = fileName.modelName;
+	//remove file extension
+	res.modelFileName = fileName.modelName.slice(0, -3);
 
-	let str = fs.readFileSync("./sources/models/"+res.modelFileName+".js").toString("utf8");
+	let str = fs.readFileSync("./sources/models/"+fileName.modelName).toString("utf8");
 
 	if(str.indexOf("webix.DataCollection") > -1){
 		res.modelType = "collection";

@@ -15,6 +15,7 @@ export default class TopView extends JetView{
 			data:[
 				{ value:"DashBoard", id:"start", icon:"envelope-o" },
 				{ value:"Data",		 id:"data",  icon:"briefcase" }
+				/*wjet::Menu*/
 			]
 		};
 
@@ -22,7 +23,7 @@ export default class TopView extends JetView{
 			type:"line", cols:[
 				{
 					type:"clean", css:"app-left-panel",
-					padding:10, margin:20, borderless:true, rows: [ header, menu ]
+					padding:10, margin:20, borderless:true, rows: [ header, menu /*wjet::Sidebar*/ ]
 				},
 				{ rows:[ { height:10},
 					{ type:"clean", css:"app-right-panel", padding:4, rows:[

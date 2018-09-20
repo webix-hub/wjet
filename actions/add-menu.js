@@ -7,7 +7,7 @@ async function run(inq, viewName, type){
 		const item = await inq.prompt([
 			{ type: 'confirm', name: 'add', message: 'Do you want to add menu item?', "default": true },
 			{ type: 'input', name: 'name', message: 'Menu item name', when: a => a.add },
-			{ type: 'input', name: 'url', message: 'Menu item url', when: a => a.add }
+			{ type: 'input', name: 'url', message: 'View', when: a => a.add }
 		]);
 
 		if(item.add)
@@ -36,22 +36,22 @@ async function run(inq, viewName, type){
 	view = `
 			${layout}:[
 				{
-					localId:"${viewName}",
+					localId:"navigation",
 					${view}
 				},
 				{$subview:true}
 			]`;
 
-	c.addView(`views/${viewName}.js`,`
+	c.addView(`views/${viewName}`,`
 		return{
 			${view}
 		};`, `
-		this.use(plugins.Menu, this.$$("${viewName}"));`
+		this.use(plugins.Menu, this.$$("navigation"));`
 	);
 
-	c.addImport(`views/${viewName}.js`, "{plugins}", "webix-jet");
+	c.addImport(`views/${viewName}`, "{plugins}", "webix-jet");
 
-	c.addMarker("views/top.js", "Menu", `{ value:"${viewName}", id:"${viewName}", icon:"compass" },`);
+	c.addMarker("views/top", "Menu", `{ value:"${viewName}", id:"${viewName}", icon:"compass" },`);
 }
 
 module.exports = {

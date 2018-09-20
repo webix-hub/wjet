@@ -34,24 +34,24 @@ module.exports = function(res, viewName, message){
 				${view}
 			},{}]`
 
-	c.addView(`views/${viewName}.js`,`
+	c.addView(`views/${viewName}`,`
 		return{
 			${view}
 		};`, init);
 
 	if(values.dhx){
 		c.addPackage(`@wbx/view-${values.id}`);
-		c.addImport(`views/${viewName}.js`, "", `@wbx/view-${values.id}`);
+		c.addImport(`views/${viewName}`, "", `@wbx/view-${values.id}`);
 	}
 	else
-		c.addMarker("app.js", "extra",`
+		c.addMarker("app", "extra",`
 				"//cdn.webix.com/site/${values.id}/${values.id}.js",
 				"//cdn.webix.com/site/${values.id}/${values.id}.css",`);
 
 	if(res.modelType){
 		const modelName = res.modelType == "proxy" ? "{getData, saveData}" : `{${res.modelName}}`;
-		c.addImport(`views/${viewName}.js`, modelName, `models/${res.modelFileName}`);
+		c.addImport(`views/${viewName}`, modelName, `models/${res.modelFileName}`);
 	}
 
-	c.addMarker("views/top.js", "Menu", `{ value:"${viewName}", id:"${viewName || values.id}", icon:"${values.icon}" },`);
+	c.addMarker("views/top", "Menu", `{ value:"${viewName}", id:"${viewName || values.id}", icon:"${values.icon}" },`);
 }

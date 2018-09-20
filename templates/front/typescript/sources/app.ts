@@ -14,9 +14,19 @@ export default class MyApp extends JetApp{
 		};
 
 		super({ ...defaults, ...config });
+
+		/*wjet::plugin*/
 	}
 }
 
 if (!BUILD_AS_MODULE){
-	webix.ready(() => new MyApp().render() );
+	webix.ready(() => {
+		webix.ready(() => {
+			webix.require([
+				/*wjet::extra*/
+			]).then(function(){
+				new MyApp().render();
+			});
+		});
+	});
 }

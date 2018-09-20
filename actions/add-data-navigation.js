@@ -62,7 +62,7 @@ async function run(inq, viewName){
 			if (!master) return false;
 			return master.id == slave.${fields.length > 0 ? fields[0].id : "value"};
 		});`
-	c.addView(`views/${viewName}.js`,`
+	c.addView(`views/${viewName}`,`
 		return{
 			cols:[
 				${masterView},
@@ -76,15 +76,15 @@ async function run(inq, viewName){
 
 	if(masterModel){
 		const modelName = masterModel.modelType == "proxy" ? "{getData, saveData}" : `{${masterModel.modelName}}`;
-		c.addImport(`views/${viewName}.js`, modelName, `models/${masterModel.modelFileName}`);
+		c.addImport(`views/${viewName}`, modelName, `models/${masterModel.modelFileName}`);
 	}
 
 	if(slaveModel){
 		const modelName = slaveModel.modelType == "proxy" ? "{getData, saveData}" : `{${slaveModel.modelName}}`;
-		c.addImport(`views/${viewName}.js`, modelName, `models/${slaveModel.modelFileName}`);
+		c.addImport(`views/${viewName}`, modelName, `models/${slaveModel.modelFileName}`);
 	}
 
-	c.addMarker("views/top.js", "Menu", `{ value:"${viewName}", id:"${viewName}", icon:"compass" },`);
+	c.addMarker("views/top", "Menu", `{ value:"${viewName}", id:"${viewName}", icon:"compass" },`);
 };
 
 module.exports = {

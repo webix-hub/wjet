@@ -69,7 +69,7 @@ async function run(inq, viewName){
 	let views = res.type == "datatable" ? `this.datatable = view.queryView({view:"datatable"});` : `this.list = view.queryView({view:"list"});
 		this.form = view.queryView({view:"form"});
 		this.form.bind(this.list);`;
-	c.addView(`views/${viewName}.js`,`
+	c.addView(`views/${viewName}`,`
 		return{
 			${view}
 		};`, `		${views}
@@ -78,9 +78,9 @@ async function run(inq, viewName){
 
 	if(model){
 		const modelName = model.modelType == "proxy" ? "{getData, saveData}" : `{${model.modelName}}`;
-		c.addImport(`views/${viewName}.js`, modelName, `models/${model.modelFileName}`);
+		c.addImport(`views/${viewName}`, modelName, `models/${model.modelFileName}`);
 	}
-	c.addMarker("views/top.js", "Menu", `{ value:"${viewName}", id:"${viewName}", icon:"compass" },`);
+	c.addMarker("views/top", "Menu", `{ value:"${viewName}", id:"${viewName}", icon:"compass" },`);
 };
 
 module.exports = {

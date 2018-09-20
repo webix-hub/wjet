@@ -15,29 +15,29 @@ async function run(inq){
 	try {
 
 		if (res.feature === "Authentication"){
-			c.addPlugin("app.js", "User", "{ model: session }");
-			c.addImport("app.js", "session", "models/session");
+			c.addPlugin("app", "User", "{ model: session }");
+			c.addImport("app", "session", "models/session");
 			c.addFile(
 				"front/features/auth/session.js",
-				"sources/models/session.js");
+				"sources/models/session");
 			c.addFile(
 				"front/features/auth/login.js",
-				"sources/views/login.js");
+				"sources/views/login");
 
-			c.addUI("views/top.js",`
+			c.addUI("views/top",`
 		const logout = {
 			view:"button", label:"Logout",
 			click: () => this.show("/logout")
 		};`)
-			c.addMarker("views/top.js", "Sidebar", ", logout");
+			c.addMarker("views/top", "Sidebar", ", logout");
 
 			message.push("login    = admin");
 			message.push("password = 1");
 		}
 
 		else if (res.feature === "Localization"){
-			c.addPlugin("app.js", "Locale", "{ lang: \"en\", \n\t\tstorage: webix.storage.prefix(this.config.id, webix.storage.local) }");
-			c.addUI("views/settings.js",`
+			c.addPlugin("app", "Locale", "{ lang: \"en\", \n\t\tstorage: webix.storage.prefix(this.config.id, webix.storage.local) }");
+			c.addUI("views/settings",`
 		const locale = this.app.getService("locale");
 		const _ = locale._;
 
@@ -53,11 +53,11 @@ async function run(inq){
 				}, value:locale.getLang() }
 			]
 		};`);
-			c.addMarker("views/settings.js", "Settings", "langs,");
+			c.addMarker("views/settings", "Settings", "langs,");
 			c.addFile("front/features/locale/en.js",
-					   "sources/locales/en.js")
+					   "sources/locales/en")
 			c.addFile("front/features/locale/de.js",
-					   "sources/locales/de.js")
+					   "sources/locales/de")
 		}
 
 		console.log(message.join("\n")+"\n");

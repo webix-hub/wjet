@@ -18,7 +18,7 @@ async function run(inq, viewName){
 		""
 	];
 
-	const model = await require("./helpers/check-model").run(inq);
+	const model = res.widget != "Querybuilder" ? await require("./helpers/check-model").run(inq, "", res.widget) : false;
 	if(model){
 		res.modelName = model.modelName;
 		res.modelType = model.modelType;

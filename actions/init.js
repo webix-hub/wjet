@@ -2,6 +2,7 @@ const vfs = require("vinyl-fs");
 const es = require("event-stream");
 const bars = require("handlebars");
 const path = require("path");
+var fs = require('fs');
 
 const c = require("./common");
 
@@ -16,8 +17,8 @@ async function run(inq){
 		 	"default": "No", choices:["No", "Less", "Sass"], when: a => a.customTools },
 		{ type: 'confirm', name: 'handlebars', message: 'Use Handlebars for templating ?',
 		 	"default": false, when: a => a.customTools  },
-		// { type: 'confirm', name: 'typescript', message: 'Use Typescript ?',
-		//  	"default": false, when: a => a.customTools },
+		{ type: 'confirm', name: 'typescript', message: 'Use Typescript ?',
+		  	"default": false, when: a => a.customTools },
 		{ type: 'list', name: 'skin', message: 'Default app skin ?',
 		 	"default": "Flat", choices:["Flat", "Compact"] },
 		{ type: 'list', name: 'edition', message: 'GPL or Commercial version of Webix UI ?',
@@ -41,7 +42,7 @@ async function run(inq){
 		files.pipe(vfs.dest("./"))
 			.on("end", function(){
 				if (res.handlebars)
-					c.addMarker("views/top.js", "Menu", "{ value:\"Info\", id:\"info\", icon:\"info\" },");
+					c.addMarker("views/top", "Menu", "{ value:\"Info\", id:\"info\", icon:\"info\" },");
 
 				console.log(`
 Files are ready. run
@@ -69,7 +70,13 @@ module.exports = {
 function stream(cfg){
 
 	const rootDir = path.resolve(__dirname+"/../templates");
-	const folder = cfg.typescript === "Yes" ? "typescript" : "es6";
+
+	const folder = cfg.typescript ? "typescript" : "es6";
+
+	const configFileContent = cfg.typescript ? "ts" : "js";
+	const configFilePath = "extension.txt";
+	fs.writeFileSync(configFilePath, configFileContent); 
+
 	const front = `${rootDir}/front/${folder}`;
 
 	const source = vfs.src([
