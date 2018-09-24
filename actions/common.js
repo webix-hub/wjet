@@ -66,6 +66,10 @@ function addFile(from, to){
 	fs.copyFileSync(path.join(rootDir, from), to);	
 }
 
+function addFolder(dir){
+	fs.existsSync(dir) || fs.mkdirSync(dir);
+}
+
 function addView(name, content, init){
 	name = "./sources/"+name;
 	let str = `import {JetView} from "webix-jet";
@@ -108,6 +112,7 @@ module.exports = {
 	addPackage,
 	addView,
 	addFile,
+	addFolder,
 	addModel,
 	addImport,
 	addUI,
