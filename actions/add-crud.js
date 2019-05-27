@@ -6,7 +6,7 @@ async function run(inq, viewName){
 	]);
 
 	let fields = await require("./helpers/fields").run(inq, res.type);
-	const model = await require("./helpers/check-model").run(inq);
+	const model = await require("./helpers/model").checkModel(inq);
 
 	const widget = res.type == "datatable" ? "this.datatable" : "this.list";
 

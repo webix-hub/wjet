@@ -1,6 +1,6 @@
 const fs = require("fs");
 
-async function run(inq, res){
+async function useModel(inq, res){
 	let allModels = [];
 
 	fs.readdirSync("./sources/models").forEach(file => {
@@ -29,6 +29,24 @@ async function run(inq, res){
 	return res;
 }
 
+async function checkModel(inq, message, widget){
+	let model = await inq.prompt([
+		{ type: 'confirm', name: 'model', message: `Do you want to add a model${message ? " "+message : ""}?`,"default": true },
+		{ type: 'confirm', name: 'useModel', message: 'Use existing model?', "default": false, when: a => a.model }
+	]);
+
+	if(model.model){
+		if(model.useModel)
+			model = await useModel(inq, model);
+		else
+			model = await require("../add-model").run(inq, widget);
+	}
+	else
+		model = false;
+	return model;
+}
+
 module.exports = {
-	run
+	useModel,
+	checkModel
 };

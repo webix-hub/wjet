@@ -1,5 +1,6 @@
 const config = require("./configs");
 const c = require("../common");
+const cfg = require("./app");
 
 module.exports = function(res, viewName, message){
 	let values = config[res.widget];
@@ -43,10 +44,13 @@ module.exports = function(res, viewName, message){
 		c.addPackage(`@wbx/view-${values.id}`);
 		c.addImport(`views/${viewName}`, "", `@wbx/view-${values.id}`);
 	}
-	else
+	else{
+		let skin = cfg.getSkin();
+		skin == "material" ? values.id : "skins/"+skin;
 		c.addMarker("app", "extra",`
 				"//cdn.webix.com/site/${values.id}/${values.id}.js",
-				"//cdn.webix.com/site/${values.id}/${values.id}.css",`);
+				"//cdn.webix.com/site/${values.id}/${skin}.css",`);
+	}
 
 	if(res.modelType){
 		const modelName = res.modelType == "proxy" ? "{getData, saveData}" : `{${res.modelName}}`;

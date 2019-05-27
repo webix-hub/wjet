@@ -1,12 +1,9 @@
 const fs = require("fs");
 const path = require("path");
-
-function getFileExtension(){
-	return fs.readFileSync("./extension.txt").toString("utf8");
-}
+const cfg = require("./helpers/app");
 
 function replaceAndSave(name, mode, text, after){
-	name = `./sources/${name}.${getFileExtension()}`;
+	name = `./sources/${name}.${cfg.getExt()}`;
 
 	let str = fs.readFileSync(name).toString("utf8");
 	let pos = str.indexOf(mode);
@@ -35,7 +32,7 @@ function addPlugin(file, name, config){
 }
 
 function addImport(file, name, from){
-	file =  `./sources/${file}.${getFileExtension()}`;
+	file =  `./sources/${file}.${cfg.getExt()}`;
 	let line;
 	if (name)
 		line = `import ${name} from "${from}";\n`;
@@ -66,11 +63,11 @@ function addPackage(name){
 
 function addFile(from, to){
 	const rootDir = path.resolve(__dirname+"/../templates");
-	fs.copyFileSync(path.join(rootDir, from), `${to}.${getFileExtension()}`);	
+	fs.copyFileSync(path.join(rootDir, from), `${to}.${cfg.getExt()}`);	
 }
 
 function addView(name, content, init){
-	name = `./sources/${name}.${getFileExtension()}`;
+	name = `./sources/${name}.${cfg.getExt()}`;
 	let str = `import {JetView} from "webix-jet";
 
 export default class MyView extends JetView{
@@ -85,7 +82,7 @@ ${init}
 }
 
 function addModel(fileName, name, mode, content){
-	fileName = `./sources/${fileName}.${getFileExtension()}`;
+	fileName = `./sources/${fileName}.${cfg.getExt()}`;
 
 	let str;
 	if (mode === "static"){

@@ -3,7 +3,7 @@ const configs = require("./helpers/configs");
 async function run(inq, viewName){
 	const widgets = Object.keys(configs);
 
-	viewName = viewName ? viewName : await require("./helpers/file-confirm").run(inq, "views");
+	viewName = viewName ? viewName : await require("./helpers/override").run(inq, "views");
 
 	let res = await inq.prompt([
 		{ type: 'list', name: 'widget', message: 'Select the widget', choices: widgets }
@@ -18,7 +18,7 @@ async function run(inq, viewName){
 		""
 	];
 
-	const model = res.widget != "Querybuilder" ? await require("./helpers/check-model").run(inq, "", res.widget) : false;
+	const model = res.widget != "Querybuilder" ? await require("./helpers/model").checkModel(inq, "", res.widget) : false;
 	if(model){
 		res.modelName = model.modelName;
 		res.modelType = model.modelType;

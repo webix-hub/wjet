@@ -1,7 +1,7 @@
 const c = require("./common");
 
 async function run(inq, widget){
-	const name = await require("./helpers/file-confirm").run(inq, "views");
+	const name = await require("./helpers/override").run(inq, "views");
 
 	const res = await inq.prompt([
 		{ type: 'list', name: 'viewType', message: 'which kind of view do you need?', choices:

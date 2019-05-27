@@ -7,7 +7,7 @@ var fs = require('fs');
 const c = require("./common");
 
 async function run(inq){
-
+	const skins = ["Material", "Mini", "Flat", "Compact", "Contrast"];
 	const res = await inq.prompt([
 		{ type: 'input', name: 'appName', message: 'Give your app a name',
 			"default": "The App!" },
@@ -20,15 +20,16 @@ async function run(inq){
 		{ type: 'confirm', name: 'typescript', message: 'Use Typescript ?',
 		  	"default": false, when: a => a.customTools },
 		{ type: 'list', name: 'skin', message: 'Default app skin ?',
-		 	"default": "Flat", choices:["Flat", "Compact"] },
+		 	"default": "Flat", choices:skins },
 		{ type: 'list', name: 'edition', message: 'GPL or Commercial version of Webix UI ?',
 			 "default": "GPL", choices:["GPL", "Commercial"] }
 	]);
 
 	try {
+		let globalSettings = res.skin.toLowerCase();
 		res.appID = res.appName.replace(/[^a-z0-9]+/gi,"-").replace(/-$|^-/, "").toLowerCase();
 		res.fileExt = res.typescript ? "ts" : "js";
-		res.skin = skins[res.skin];
+		res.skin = res.skin == skins[0] ? "webix.css" : "skins/"+res.skin.toLowerCase()+".css";
 
 		res.css = (res.css||"css").toLowerCase();
 		if (res.css === "no") res.css = "css";
@@ -38,7 +39,7 @@ async function run(inq){
 		res.webixPath = res.edition === "GPL" ? "node_modules/webix/" : "node_modules/@xbs/webix-pro/";
 		res.webixNPM = res.edition === "GPL" ? "webix" : "@xbs/webix-pro";
 
-		var files = stream(res);
+		var files = stream(res, globalSettings);
 		files.pipe(vfs.dest("./"))
 			.on("end", function(){
 				if (res.handlebars)
@@ -58,24 +59,18 @@ to start the app`)
 
 }
 
-const skins = {
-	"Flat" : "webix.css",
-	"Compact" : "skins/compact.css"
-};
-
 module.exports = {
 	run
 };
 
-function stream(cfg){
+function stream(cfg, globalSettings){
 
 	const rootDir = path.resolve(__dirname+"/../templates");
 
 	const folder = cfg.typescript ? "typescript" : "es6";
 
-	const configFileContent = cfg.typescript ? "ts" : "js";
-	const configFilePath = "extension.txt";
-	fs.writeFileSync(configFilePath, configFileContent); 
+	const ext = cfg.typescript ? "ts" : "js";
+	fs.writeFileSync("config.txt", ext + ";" + globalSettings);
 
 	const front = `${rootDir}/front/${folder}`;
 

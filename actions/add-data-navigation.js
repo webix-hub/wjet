@@ -1,4 +1,5 @@
 const c = require("./common");
+const model = require("./helpers/model");
 
 async function run(inq, viewName){
 	const res = await inq.prompt([
@@ -9,9 +10,9 @@ async function run(inq, viewName){
 
 	let fields = res.masterFields ? await require("./helpers/fields").run(inq, res.slave) : [];
 
-	let masterModel = await require("./helpers/check-model").run(inq, "for main view");
+	let masterModel = await model.checkModel(inq, "for main view");
 
-	let slaveModel = res.slave == "datatable" ? await require("./helpers/check-model").run(inq, "for details view") : false;
+	let slaveModel = res.slave == "datatable" ? await model.checkModel(inq, "for details view") : false;
 
 	let data = "";
 	if(masterModel)
