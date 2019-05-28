@@ -43,8 +43,8 @@
     "sass-loader": "^7.0.0",
     {{/if}}
     {{#if webixNPM}}
-    "{{webixNPM}}":"^5.3.0",
+    "{{webixNPM}}":"^6.3.0",
     {{/if}}
-    "webix-jet": "^1.6.0"
+    "webix-jet": "^2.0.0"
   }
 }

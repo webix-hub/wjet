@@ -51,7 +51,7 @@ async function run(inq, viewName, type){
 
 	c.addImport(`views/${viewName}`, "{plugins}", "webix-jet");
 
-	c.addMarker("views/top", "Menu", `{ value:"${viewName}", id:"${viewName}", icon:"compass" },`);
+	c.addMarker("views/top", "Menu", `{ value:"${viewName}", id:"${viewName}", icon:"wxi-search" },`);
 }
 
 module.exports = {

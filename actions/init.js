@@ -43,7 +43,7 @@ async function run(inq){
 		files.pipe(vfs.dest("./"))
 			.on("end", function(){
 				if (res.handlebars)
-					c.addMarker("views/top", "Menu", "{ value:\"Info\", id:\"info\", icon:\"info\" },");
+					c.addMarker("views/top", "Menu", "{ value:\"Info\", id:\"info\", icon:\"wxi-pencil\" },");
 
 				console.log(`
 Files are ready. run

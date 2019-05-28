@@ -46,7 +46,7 @@ module.exports = function(res, viewName, message){
 	}
 	else{
 		let skin = cfg.getSkin();
-		skin == "material" ? values.id : "skins/"+skin;
+		skin = skin == "material" ? values.id : "skins/"+skin;
 		c.addMarker("app", "extra",`
 				"//cdn.webix.com/site/${values.id}/${values.id}.js",
 				"//cdn.webix.com/site/${values.id}/${skin}.css",`);

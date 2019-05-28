@@ -25,10 +25,10 @@ async function run(inq, viewName){
 					editable: true,
 					columns: [
 						${JSON.stringify(fields).slice(1, -1)},
-						{header: "delete", template: "{common.trashIcon()}"}
+						{header: "delete", template: "{common.trashIcon()}", width:60}
 					],
 					onClick: {
-						"fa-trash": (ev, id) => {
+						"wxi-trash": (ev, id) => {
 							webix.confirm({
 								text: "This record will be deleted. <br/> Are you sure?",
 								ok: "Yes",
@@ -80,7 +80,7 @@ async function run(inq, viewName){
 		const modelName = model.modelType == "proxy" ? "{getData, saveData}" : `{${model.modelName}}`;
 		c.addImport(`views/${viewName}`, modelName, `models/${model.modelFileName}`);
 	}
-	c.addMarker("views/top", "Menu", `{ value:"${viewName}", id:"${viewName}", icon:"compass" },`);
+	c.addMarker("views/top", "Menu", `{ value:"${viewName}", id:"${viewName}", icon:"wxi-pencil" },`);
 };
 
 module.exports = {

@@ -19,12 +19,12 @@ export default class MyApp extends JetApp{
 
 if (!BUILD_AS_MODULE){
 	webix.ready(() => {
-		webix.ready(() => {
-			webix.require([
-				/*wjet::extra*/
-			]).then(function(){
-				new MyApp().render();
-			});
+		const extra = [
+			/*wjet::extra*/
+		];
+
+		(extra.length ? webix.require(extra) : webix.promise.resolve()).then(function(){
+			new MyApp().render();
 		});
 	});
 }

@@ -17,11 +17,11 @@ const scheduler = `[
 
 const filemanager = `[
 	{"id": "files", "value": "Files", "open": 1,  "type": "folder", "date":  "2014-02-10 16:10", "data":[
-		{ "id": "video", "value": "Video", "type": "folder", "date":  "2014-02-10 16:12", "data":[
-			{"id": "video1", "value": "New Year 2013.avi", "icon": "file-video-o", "type":"video", "date":  "2014-02-10 16:12", "size": "25030000", "pId": "video" },
-			{"id": "video2", "value": "Presentation.avi", "icon": "file-video-o","type":"video", "date":  "2014-02-10 16:12", "size": "11072000" , "pId": "video"},
-			{"id": "video3", "value": "Conference.avi", "icon": "file-video-o", "type":"video", "date":  "2014-02-10 16:12", "size": "31256000", "pId": "video" }
-		]}
+		{"id": "presentations", "value": "Presentations", "type": "folder", "date":  "2014-02-10 16:10", "data":[
+			{"id": "pres2", "value": "June 2014.ppt",  "type":"pp", "date":  "2014-02-10 16:10", "size": "20100"},
+			{"id": "pres3", "value": "April 2014.ppt", "type":"pp", "date":  "2014-02-10 16:10", "size": "15750"}
+		]},
+		{"id": "pres1", "value": "October 2014.ppt", "type":"pp", "date": "2014-02-10 16:10", "size": "12830"},
 	]}
 ]`;
 

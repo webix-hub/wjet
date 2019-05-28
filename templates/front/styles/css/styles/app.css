@@ -77,7 +77,8 @@
 	color:#ddd;
 }
 .app-left-panel .webix_menu .webix_list_item.webix_selected{
-	color:#fff;
+	color:#000;
+	background-color: #f5f5f5;
 }
 .app-left-panel .webix_menu .webix_list_item:hover{
 	background-color: #f5f5f5;

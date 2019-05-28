@@ -85,7 +85,7 @@ async function run(inq, viewName){
 		c.addImport(`views/${viewName}`, modelName, `models/${slaveModel.modelFileName}`);
 	}
 
-	c.addMarker("views/top", "Menu", `{ value:"${viewName}", id:"${viewName}", icon:"compass" },`);
+	c.addMarker("views/top", "Menu", `{ value:"${viewName}", id:"${viewName}", icon:"wxi-columns" },`);
 };
 
 module.exports = {
