@@ -5,7 +5,7 @@ async function run(inq, viewName){
 		{ type: 'list', name: 'type', message: 'CRUD type', default: "datatable", choices:["datatable", "form"] },
 	]);
 
-	let fields = await require("./helpers/fields").addFields(inq, res.type);
+	const fields = await require("./helpers/fields").addFields(inq, res.type);
 	const model = await require("./helpers/models").checkModel(inq);
 
 	const widget = res.type == "datatable" ? "this.datatable" : "this.list";
@@ -66,8 +66,8 @@ async function run(inq, viewName){
 				}
 			]`;
 
-	let views = res.type == "datatable" ? `this.datatable = view.queryView({view:"datatable"});` : `this.list = view.queryView({view:"list"});
-		this.form = view.queryView({view:"form"});
+	let views = res.type == "datatable" ? `this.datatable = view.queryView("datatable");` : `this.list = view.queryView("list");
+		this.form = view.queryView("form");
 		this.form.bind(this.list);`;
 	c.addView(`views/${viewName}`,`
 		return{

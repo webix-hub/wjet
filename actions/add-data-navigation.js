@@ -9,35 +9,19 @@ async function run(inq, viewName){
 	]);
 
 	const fields = res.masterFields ? await require("./helpers/fields").addFields(inq, res.slave) : [];
+	const masterModel = await model.checkModel(inq, "for main view");
+	const slaveModel = res.slave == "datatable" ? await model.checkModel(inq, "for details view") : false;
 
-	let masterModel = await model.checkModel(inq, "for main view");
+	const data = getData(masterModel)+getData(slaveModel);
 
-	let slaveModel = res.slave == "datatable" ? await model.checkModel(inq, "for details view") : false;
-
-	let data = "";
-	if(masterModel)
-		data = masterModel.modelType == "proxy" ? 
-			`getData().then((data)=>{
-			this.$$("master").parse(data.json(), "json");
-		});` :  `this.$$("master").parse(${masterModel.modelName}, "json");`;
-
-	if(slaveModel)
-		data += slaveModel.modelType == "proxy" ? 
-			`
-			getData().then((data)=>{
-			this.$$("slave").parse(data.json(), "json");
-		});` :  `this.$$("slave").parse(${slaveModel.modelName}, "json");`;
-
-	const masterView = res.type == "datatable" ? 
-				`
-				{
+	const masterView = res.type == "datatable" ?
+				`{
 					view:"datatable",
 					localId: "master",
 					columns: [{id: "id", header: "ID", fillspace:true}],
 					select: true
 				}`:
-				`
-				{
+				`{
 					view:"${res.type}",
 					template:"#id#",
 					localId: "master",
@@ -63,6 +47,7 @@ async function run(inq, viewName){
 			if (!master) return false;
 			return master.id == slave.${fields.length > 0 ? fields[0].id : "value"};
 		});`
+
 	c.addView(`views/${viewName}`,`
 		return{
 			cols:[
@@ -75,18 +60,26 @@ async function run(inq, viewName){
 		`
 	);
 
-	if(masterModel){
-		const modelName = masterModel.modelType == "proxy" ? "{getData, saveData}" : `{${masterModel.modelName}}`;
-		c.addImport(`views/${viewName}`, modelName, `models/${masterModel.modelFileName}`);
-	}
-
-	if(slaveModel){
-		const modelName = slaveModel.modelType == "proxy" ? "{getData, saveData}" : `{${slaveModel.modelName}}`;
-		c.addImport(`views/${viewName}`, modelName, `models/${slaveModel.modelFileName}`);
-	}
+	importModel(masterModel, viewName);
+	importModel(slaveModel, viewName);
 
 	c.addMarker("views/top", "Menu", `{ value:"${viewName}", id:"${viewName}", icon:"wxi-columns" },`);
 };
+
+function importModel(model, viewName){
+	if(!model) return;
+	const modelName = model.modelType == "proxy" ? "{getData, saveData}" : `{${model.modelName}}`;
+	c.addImport(`views/${viewName}`, modelName, `models/${model.modelFileName}`);
+}
+
+function getData(model){
+	return model ?
+		model.modelType == "proxy" ? 
+			`getData().then((data)=>{
+			this.$$("master").parse(data.json(), "json");
+		});` :  `this.$$("master").parse(${model.modelName}, "json");`:
+		"";
+}
 
 module.exports = {
 	run
