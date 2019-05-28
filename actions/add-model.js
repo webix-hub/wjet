@@ -2,7 +2,7 @@ const c = require("./common");
 const configs = require("./helpers/configs");
 
 async function run(inq, widget){
-	const name = await require("./helpers/override").run(inq, "models");
+	const name = await require("./helpers/filename").setName(inq, "models");
 
 	const res = await inq.prompt([
 		{ type: 'list', name: 'modelType', message: 'Which kind of model do you want to create',

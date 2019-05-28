@@ -2,7 +2,7 @@ const config = require("./configs");
 const c = require("../common");
 const cfg = require("./app");
 
-module.exports = function(res, viewName, message){
+function addWidget(res, viewName, message){
 	let values = config[res.widget];
 	let data = "";
 	let init = "";
@@ -59,3 +59,7 @@ module.exports = function(res, viewName, message){
 
 	c.addMarker("views/top", "Menu", `{ value:"${viewName}", id:"${viewName || values.id}", icon:"${values.icon}" },`);
 }
+
+module.exports = {
+	addWidget
+};

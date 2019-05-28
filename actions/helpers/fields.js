@@ -1,4 +1,4 @@
-async function run(inq, type){
+async function addFields(inq, type){
 	let fields = [];
 	let done;
 	while (done != true) {
@@ -19,5 +19,5 @@ async function run(inq, type){
 }
 
 module.exports = {
-	run
+	addFields
 };

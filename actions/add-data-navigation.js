@@ -1,5 +1,5 @@
 const c = require("./common");
-const model = require("./helpers/model");
+const model = require("./helpers/models");
 
 async function run(inq, viewName){
 	const res = await inq.prompt([
@@ -8,7 +8,7 @@ async function run(inq, viewName){
 		{ type: 'confirm', name: 'masterFields', message: 'Do you want to add fields for details view?', default: true }
 	]);
 
-	let fields = res.masterFields ? await require("./helpers/fields").run(inq, res.slave) : [];
+	const fields = res.masterFields ? await require("./helpers/fields").addFields(inq, res.slave) : [];
 
 	let masterModel = await model.checkModel(inq, "for main view");
 

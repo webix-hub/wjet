@@ -1,7 +1,7 @@
 const fs = require("fs");
 const cfg = require("./app");
 
-async function run(inq, type){
+async function setName(inq, type){
 	let done;
 	let fileName;
 	while (done != true) {
@@ -19,5 +19,5 @@ async function run(inq, type){
 }
 
 module.exports = {
-	run
+	setName
 };

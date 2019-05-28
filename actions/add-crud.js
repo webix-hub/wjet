@@ -5,8 +5,8 @@ async function run(inq, viewName){
 		{ type: 'list', name: 'type', message: 'CRUD type', default: "datatable", choices:["datatable", "form"] },
 	]);
 
-	let fields = await require("./helpers/fields").run(inq, res.type);
-	const model = await require("./helpers/model").checkModel(inq);
+	let fields = await require("./helpers/fields").addFields(inq, res.type);
+	const model = await require("./helpers/models").checkModel(inq);
 
 	const widget = res.type == "datatable" ? "this.datatable" : "this.list";
 

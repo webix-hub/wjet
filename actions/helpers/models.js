@@ -48,6 +48,5 @@ async function checkModel(inq, message, widget){
 }
 
 module.exports = {
-	useModel,
 	checkModel
 };
