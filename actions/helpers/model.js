@@ -12,7 +12,8 @@ async function useModel(inq, res){
 	]);
 
 	//remove file extension
-	res.modelFileName = fileName.modelName.slice(0, -3);
+	const extIndex = fileName.modelName.lastIndexOf(".");
+	res.modelFileName = fileName.modelName.substring(0, extIndex);
 
 	let str = fs.readFileSync("./sources/models/"+fileName.modelName).toString("utf8");
 
