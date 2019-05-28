@@ -45,11 +45,14 @@ function addWidget(res, viewName, message){
 		c.addImport(`views/${viewName}`, "", `@wbx/view-${values.id}`);
 	}
 	else{
-		let skin = cfg.getSkin();
-		skin = skin == "material" ? values.id : "skins/"+skin;
-		c.addMarker("app", "extra",`
-				"//cdn.webix.com/site/${values.id}/${values.id}.js",
-				"//cdn.webix.com/site/${values.id}/${skin}.css",`);
+		const cdn = `//cdn.webix.com/site/${values.id}/`;
+		if(require("./app").notImported(cdn)){
+			let skin = cfg.getSkin();
+			skin = skin == "material" ? values.id : "skins/"+skin;
+			c.addMarker("app", "extra",`
+				"${cdn}${values.id}.js",
+				"${cdn}${skin}.css",`);
+		}
 	}
 
 	if(res.modelType){
