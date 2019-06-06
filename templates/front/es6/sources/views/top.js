@@ -2,12 +2,18 @@ import {JetView, plugins} from "webix-jet";
 
 export default class TopView extends JetView{
 	config(){
+
 		const header = {
-			type:"header", template:this.app.config.name
+			view:"toolbar",
+			css:"webix_dark", padding:{ left:8 },
+			elements:[
+				{ view:"label", label:this.app.config.name }
+				/*wjet::Topbar*/
+			]
 		};
 
 		const menu = {
-			view:"menu", id:"top:menu", 
+			view:"sidebar", id:"top:menu", 
 			width:180, layout:"y", select:true,
 			template:"<span class='webix_icon #icon#'></span> #value# ",
 			data:[
@@ -19,15 +25,12 @@ export default class TopView extends JetView{
 		};
 
 		const ui = {
-			type:"line", cols:[
-				{ 
-					type:"clean", css:"app-left-panel",
-					padding:10, margin:20, borderless:true, rows: [ header, menu /*wjet::Sidebar*/ ]
-				},
-				{ rows:[ { height:10}, 
-					{ type:"clean", css:"app-right-panel", padding:4, rows:[
-						{ $subview:true } 
-					]}
+			rows:[
+				header,
+				{ type:"space", cols:[
+					menu,
+					{ $subview:true } 
+					
 				]}
 			]
 		};

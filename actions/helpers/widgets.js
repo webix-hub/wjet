@@ -12,7 +12,7 @@ function addWidget(res, viewName, message){
 			let loading = res.modelType == "proxy" ? 
 			`getData().then((data)=>{
 					widget.parse(data.json(), "json");
-				});` :  `widget.parse(${res.modelName}, "json")`;
+				});` :  `widget.parse(data, "json")`;
 
 			init = `
 			view.${values.method}(true).then(widget => {
@@ -22,7 +22,7 @@ function addWidget(res, viewName, message){
 		}
 		else{
 			data = res.modelType && res.modelType == "proxy"  ? `url:getData,
-			save:saveData,` : `data: ${res.modelName},`;
+			save:saveData,` : `data: data,`;
 		}
 	}
 
@@ -35,28 +35,32 @@ function addWidget(res, viewName, message){
 				${view}
 			},{}]`
 
-	c.addView(`views/${viewName}`,`
-		return{
-			${view}
-		};`, init);
-
 	if(values.dhx){
+		c.addView(`views/${viewName}`,`
+			return {
+				${view}
+			};`, init);
+
 		c.addPackage(`@wbx/view-${values.id}`);
 		c.addImport(`views/${viewName}`, "", `@wbx/view-${values.id}`);
 	}
 	else{
-		const cdn = `//cdn.webix.com/site/${values.id}/`;
-		if(require("./app").notImported(cdn)){
-			let skin = cfg.getSkin();
-			skin = skin == "material" ? values.id : "skins/"+skin;
-			c.addMarker("app", "extra",`
-				"${cdn}${values.id}.js",
-				"${cdn}${skin}.css",`);
-		}
+		const cdn = `//cdn.webix.com/pro/edge/${values.id}/`;
+
+		let skin = cfg.getSkin();
+		skin = skin == "material" ? values.id : "skins/"+skin;
+
+		c.addView(`views/${viewName}`,`
+			return webix.require({
+				"${cdn}${values.id}.js":true,
+				"${cdn}${skin}.css":true
+			}).then(() => {
+				return { ${view} };
+			});`, init);
 	}
 
 	if(res.modelType){
-		const modelName = res.modelType == "proxy" ? "{getData, saveData}" : `{${res.modelName}}`;
+		const modelName = res.modelType == "proxy" ? "{getData, saveData}" : `{data}`;
 		c.addImport(`views/${viewName}`, modelName, `models/${res.modelFileName}`);
 	}
 

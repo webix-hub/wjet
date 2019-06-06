@@ -15,17 +15,20 @@ async function run(inq, viewName){
 		data = model.modelType == "proxy" ? 
 			`getData().then((data)=>{
 			${widget}.parse(data.json(), "json");
-		});` :  `${widget}.parse(${model.modelName}, "json");`;
+		});` :  `${widget}.parse(data, "json");`;
 
 	const view = res.type == "datatable" ?
 			`rows:[
-				{ view:"button", value:"add new",click:()=>{ this.datatable.add({});}},
+				{ view:"toolbar", cols:[
+					{ view:"button", width:120, value:"Add new",click:()=>{ this.datatable.add({});}},
+					{}
+				]},
 				{
 					view: "datatable",
 					editable: true,
 					columns: [
 						${JSON.stringify(fields).slice(1, -1)},
-						{header: "delete", template: "{common.trashIcon()}", width:60}
+						{header: " ", template: "{common.trashIcon()}", width:60}
 					],
 					onClick: {
 						"wxi-trash": (ev, id) => {
@@ -45,6 +48,7 @@ async function run(inq, viewName){
 			`cols:[
 				{
 					view:"list",
+					width:250,
 					template: "#${fields.length > 0 ? fields[0].name : ""}#",
 					select:true
 				},
@@ -77,7 +81,7 @@ async function run(inq, viewName){
 	);
 
 	if(model){
-		const modelName = model.modelType == "proxy" ? "{getData, saveData}" : `{${model.modelName}}`;
+		const modelName = model.modelType == "proxy" ? "{getData, saveData}" : `{data}`;
 		c.addImport(`views/${viewName}`, modelName, `models/${model.modelFileName}`);
 	}
 	c.addMarker("views/top", "Menu", `{ value:"${viewName}", id:"${viewName}", icon:"wxi-pencil" },`);

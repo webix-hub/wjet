@@ -10,6 +10,16 @@
 	<!-- App -->
 	<script type="text/javascript" src="codebase/app.js"></script>
 	<link rel="stylesheet" type="text/css" href="codebase/app.css">
+
+	<script type="text/javascript">
+		webix.ready(function(){
+			if (webix.CustomScroll)
+				webix.CustomScroll.init();
+
+			const app = new {{appStrictID}}.App();
+			app.render(document.body);
+		});
+	</script>
 </head>
 <body></body>
 </html>

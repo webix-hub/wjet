@@ -85,15 +85,14 @@ ${init}
 	fs.writeFileSync(name, str);
 }
 
-function addModel(fileName, name, mode, content){
+function addModel(fileName, mode, content){
 	fileName = `./sources/${fileName}.${cfg.getExt()}`;
 
 	let str;
 	if (mode === "static"){
-		str = `export const ${name} = ${content};`;
+		str = `export const data = ${content};`;
 	} else if(mode === "collection"){
-		str = `export const ${name} = new webix.DataCollection({
-	data: ${content}
+		str = `export const data = new webix.DataCollection({ data: ${content}
 });`;
 	} else if(mode === "proxy"){
 		str = `export function getData(){

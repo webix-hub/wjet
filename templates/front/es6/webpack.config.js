@@ -4,55 +4,58 @@ var webpack = require("webpack");
 module.exports = function(env) {
 
 	var pack = require("./package.json");
-	var ExtractTextPlugin = require("extract-text-webpack-plugin");
+	var MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 	var production = !!(env && env.production === "true");
 	var asmodule = !!(env && env.module === "true");
-	var standalone = !!(env && env.standalone === "true");
 
 	var babelSettings = {
 		extends: path.join(__dirname, '/.babelrc')
 	};
 
 	var config = {
-		entry: "./sources/app.js",
+		mode: production ? "production" : "development",
+		entry: {
+			app: "./sources/app.js"
+		},
 		output: {
 			path: path.join(__dirname, "codebase"),
 			publicPath:"/codebase/",
-			filename: "app.js"
+			filename: "[name].js",
+			library: "{{appStrictID}}",
+			libraryTarget : "umd"
 		},
-		devtool: "inline-source-map",
 		module: {
 			rules: [
 				{
 					test: /\.js$/,
-					loader: "babel-loader?" + JSON.stringify(babelSettings)
+					use: "babel-loader?" + JSON.stringify(babelSettings)
 				},
 				{
 					test: /\.(svg|png|jpg|gif)$/,
-					loader: "url-loader?limit=25000"
+					use: "url-loader?limit=25000"
 				},
 				{{#if handlebars}}
 				{
 					test: /\.(handlebars)$/,
-					loader: "handlebars-loader"
+					use: "handlebars-loader"
 				},
 				{{/if}}
 				{{#if less}}
 				{
 					test: /\.less$/,
-					loader: ExtractTextPlugin.extract("css-loader!less-loader")
+					use: [ MiniCssExtractPlugin.loader, "css-loader", "less-loader" ]
 				}
 				{{else}}
 				{{#if sass}}
 				{
 					test: /\.scss$/,
-					loader: ExtractTextPlugin.extract("css-loader!sass-loader")
+					use: [ MiniCssExtractPlugin.loader, "css-loader", "sass-loader" ]
 				}
 				{{else}}
 				{
 					test: /\.(css)$/,
-					loader: ExtractTextPlugin.extract("css-loader")
+					use: [ MiniCssExtractPlugin.loader, "css-loader" ]
 				}
 				{{/if}}
 				{{/if}}
@@ -60,44 +63,34 @@ module.exports = function(env) {
 		},
 		resolve: {
 			extensions: [".js"],
-			modules: ["./sources", "node_modules"],
+			modules: ["./sources", "node_modules", "./codebase"],
 			alias:{
 				"jet-views":path.resolve(__dirname, "sources/views"),
 				"jet-locales":path.resolve(__dirname, "sources/locales")
 			}
 		},
 		plugins: [
-			new ExtractTextPlugin("./app.css"),
+			new MiniCssExtractPlugin({
+				filename:"[name].css"
+			}),
 			new webpack.DefinePlugin({
 				VERSION: `"${pack.version}"`,
 				APPNAME: `"${pack.name}"`,
-				PRODUCTION : production,
-				BUILD_AS_MODULE : (asmodule || standalone)
+				PRODUCTION : production
 			})
-		]
+		],
+		devServer:{
+			stats:"errors-only"
+		}
 	};
 
-	if (production) {
-		config.plugins.push(
-			new  webpack.optimize.UglifyJsPlugin({
-				test: /\.js$/
-			})
-		);
+	if (!production){
+		config.devtool = "inline-source-map";
 	}
 
 	if (asmodule){
-		if (!standalone){
-			config.externals = config.externals || {};
-			config.externals = [ "webix-jet" ];
-		}
-
-		const out = config.output;
-		const sub = standalone ? "full" : "module";
-
-		out.library = pack.name.replace(/[^a-z0-9]/gi, "");
-		out.libraryTarget= "umd";
-		out.path = path.join(__dirname, "dist", sub);
-		out.publicPath = "/dist/"+sub+"/";
+		config.externals = config.externals || {};
+		config.externals = [ "webix-jet" ];
 	}
 
 	return config;

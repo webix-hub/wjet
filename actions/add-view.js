@@ -5,10 +5,10 @@ async function run(inq, widget){
 
 	const res = await inq.prompt([
 		{ type: 'list', name: 'viewType', message: 'which kind of view do you need?', choices:
-			["Navigation with sub-elements", "Widget centric", "CRUD", "Data navigation"]
+			["Navigation with sub-views", "Based on complex widget", "CRUD", "Data navigation"]
 		},
 		{ type: 'list', name: 'navType', message: 'Select the navigation type', choices:
-			["top menu", "sidebar", "tabbar"], when: a => a.viewType == "Navigation with sub-elements"
+			["top menu", "sidebar", "tabbar"], when: a => a.viewType == "Navigation with sub-views"
 		}
 	]);
 
@@ -16,10 +16,10 @@ async function run(inq, widget){
 
 	try {
 		switch (res.viewType) {
-			case "Widget centric":
+			case "Based on complex widget":
 				require("./add-widget").run(inq, res.name);
 				break;
-			case "Navigation with sub-elements":
+			case "Navigation with sub-views":
 				require("./add-menu").run(inq, res.name, res.navType);
 				break;
 			case "CRUD":

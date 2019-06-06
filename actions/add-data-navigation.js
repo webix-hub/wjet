@@ -4,8 +4,8 @@ const model = require("./helpers/models");
 async function run(inq, viewName){
 	const res = await inq.prompt([
 		{ type: 'list', name: 'type', message: 'Main view', default: "tree", choices:["tree", "list", "datatable"] },
-		{ type: 'list', name: 'slave', message: 'View as details', default: "table", choices:["datatable", "form"] },
-		{ type: 'confirm', name: 'masterFields', message: 'Do you want to add fields for details view?', default: true }
+		{ type: 'list', name: 'slave', message: 'Related view', default: "table", choices:["datatable", "form"] },
+		{ type: 'confirm', name: 'masterFields', message: 'Do you want to configure fields of details view?', default: true }
 	]);
 
 	const fields = res.masterFields ? await require("./helpers/fields").addFields(inq, res.slave) : [];
@@ -25,6 +25,7 @@ async function run(inq, viewName){
 					view:"${res.type}",
 					template:"#id#",
 					localId: "master",
+					width: 250,
 					select: true
 				}`;
 
@@ -68,7 +69,7 @@ async function run(inq, viewName){
 
 function importModel(model, viewName){
 	if(!model) return;
-	const modelName = model.modelType == "proxy" ? "{getData, saveData}" : `{${model.modelName}}`;
+	const modelName = model.modelType == "proxy" ? "{getData, saveData}" : `{data}`;
 	c.addImport(`views/${viewName}`, modelName, `models/${model.modelFileName}`);
 }
 
@@ -77,7 +78,7 @@ function getData(model){
 		model.modelType == "proxy" ? 
 			`getData().then((data)=>{
 			this.$$("master").parse(data.json(), "json");
-		});` :  `this.$$("master").parse(${model.modelName}, "json");`:
+		});` :  `this.$$("master").parse(data, "json");`:
 		"";
 }
 

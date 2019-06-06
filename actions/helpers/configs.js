@@ -12,8 +12,10 @@ module.exports = {
 	"Spreadsheet": {icon:"wxi-columns", id:"spreadsheet", value:"Spreadsheet", model:data.spreadsheet},
 	"Kanban": {icon:"wxi-plus-square", id:"kanban", value:"Kanban", model:data.kanban,
 		extra: `cols:[
+				{header:"Backlog", body:{ view:"kanbanlist", status:"backlog" }},
 				{header:"In Progress", body:{ view:"kanbanlist", status:"work" }},
-				{header:"Done", body:{ view:"kanbanlist", status:"done" }}
+				{header:"Done", body:{ view:"kanbanlist", status:"done" }},
+				{header:"Verified", body:{ view:"kanbanlist", status:"verified" }}
 			]`
 	},
 	"Querybuilder": {icon:"wxi-search", id:"querybuilder", value:"Querybuilder", spacer:true,

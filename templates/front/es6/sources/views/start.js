@@ -1,7 +1,13 @@
 import {JetView} from "webix-jet";
 
-export default class DataView extends JetView{
+export default class StartView extends JetView{
 	config(){
-		return { template:"Place the main overview here", autoConfig:true };
+		return {
+			rows:[
+				{ type:"header", template:"Dashboard"},
+				/*wjet::Settings*/
+				{ template:"Place main app's stats here", borderless:true }
+			]
+		}
 	}
 }

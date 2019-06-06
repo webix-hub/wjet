@@ -26,10 +26,10 @@ async function run(inq){
 
 			c.addUI("views/top",`
 		const logout = {
-			view:"button", label:"Logout",
+			view:"button", label:"Logout", width: 120,
 			click: () => this.show("/logout")
 		};`)
-			c.addMarker("views/top", "Sidebar", ", logout");
+			c.addMarker("views/top", "Topbar", ", logout");
 
 			message.push("login    = admin");
 			message.push("password = 1");
@@ -42,18 +42,21 @@ async function run(inq){
 		const _ = locale._;
 
 		const langs = {
-			paddingX:20, rows:[
-				{ type:"section", template:_("AppsLanguage")},
-				{ view:"segmented", localId:"lang", options:[
-					{ id:"en", value:"English" },
-					{ id:"de", value:"Deutsche"}
-				], optionWidth:100, click:() => {
-					const value = this.$$("lang").getValue();
-					locale.setLang(value);
-				}, value:locale.getLang() }
-			]
+			view:"segmented",
+			localId:"lang",
+			label:_("AppsLanguage"), labelWidth:200,
+			options:[
+				{ id:"en", value:"English" },
+				{ id:"de", value:"Deutsche"}
+			],
+			optionWidth:100,
+			click:() => {
+				const value = this.$$("lang").getValue();
+				locale.setLang(value);
+			},
+			value:locale.getLang()
 		};`);
-			c.addMarker("views/settings", "Settings", "langs,");
+			c.addMarker("views/settings", "Settings", `{ type:"form", rows:[langs] },`);
 			c.addFolder("sources/locales");
 			c.addFile("front/features/locale/en.js",
 					   "sources/locales/en")

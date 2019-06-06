@@ -19,18 +19,16 @@ async function useModel(inq, res){
 
 	if(str.indexOf("webix.DataCollection") > -1){
 		res.modelType = "collection";
-		res.modelName = /export const (.*) =/g.exec(str) ? /export const (.*) =/g.exec(str)[1] : "";
 	}
 	else if(str.indexOf("webix.ajax") > -1)
 		res.modelType = "proxy";
 	else{
 		res.modelType = "static";
-		res.modelName = /export const (.*) =/g.exec(str) ? /export const (.*) =/g.exec(str)[1] : "";
 	}
 	return res;
 }
 
-async function checkModel(inq, message, widget){
+async function checkModel(inq, message, data){
 	let model = await inq.prompt([
 		{ type: 'confirm', name: 'model', message: `Do you want to add a model${message ? " "+message : ""}?`,"default": true },
 		{ type: 'confirm', name: 'useModel', message: 'Use existing model?', "default": false, when: a => a.model }
@@ -40,7 +38,7 @@ async function checkModel(inq, message, widget){
 		if(model.useModel)
 			model = await useModel(inq, model);
 		else
-			model = await require("../add-model").run(inq, widget);
+			model = await require("../add-model").run(inq, data);
 	}
 	else
 		model = false;

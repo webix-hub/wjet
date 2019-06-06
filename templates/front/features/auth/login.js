@@ -2,14 +2,14 @@ import {JetView} from "webix-jet";
 
 export default class LoginView extends JetView{
     config(){
-        const login_form = {
-            view:"form", id:"login:form",
-            width:400, borderless:false, margin:10,
+        const head = { type:"header", template: "Login", css:"webix_dark" };
+        const body = {
+            view:"form", localId:"form",
+            width:400,
             rows:[
-                { type:"header", template: this.app.config.name },
                 { view:"text", name:"login", label:"User Name", labelPosition:"top" },
                 { view:"text", type:"password", name:"pass", label:"Password", labelPosition:"top" },
-                { view:"button", value:"Login", click:() => this.do_login(), hotkey:"enter" }
+                { view:"button", value:"Login", click:() => this.Login(), hotkey:"enter" }
             ],
             rules:{
                 login:webix.rules.isNotEmpty,
@@ -18,15 +18,18 @@ export default class LoginView extends JetView{
         };
 
         return {
-            cols:[{}, { rows:[{}, login_form, {}]}, {}]
+            view:"window",
+            position:"center",
+            head,
+            body
         };
     }
 
     init(view){
-        view.$view.querySelector("input").focus();
+        this.getRoot().show();
     }
 
-    do_login(){
+    Login(){
         const user = this.app.getService("user");
         const form = this.getRoot().queryView({ view:"form" });
 

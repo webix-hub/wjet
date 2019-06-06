@@ -20,7 +20,7 @@ async function run(inq){
 		{ type: 'confirm', name: 'typescript', message: 'Use Typescript ?',
 		  	"default": false, when: a => a.customTools },
 		{ type: 'list', name: 'skin', message: 'Default app skin ?',
-		 	"default": "Flat", choices:skins },
+		 	"default": "Material", choices:skins },
 		{ type: 'list', name: 'edition', message: 'GPL or Commercial version of Webix UI ?',
 			 "default": "GPL", choices:["GPL", "Commercial"] }
 	]);
@@ -28,6 +28,7 @@ async function run(inq){
 	try {
 		let globalSettings = res.skin.toLowerCase();
 		res.appID = res.appName.replace(/[^a-z0-9]+/gi,"-").replace(/-$|^-/, "").toLowerCase();
+		res.appStrictID = res.appName.replace(/[^a-z0-9]+/gi,"").toLowerCase();
 		res.fileExt = res.typescript ? "ts" : "js";
 		res.skin = res.skin == skins[0] ? "webix.css" : "skins/"+res.skin.toLowerCase()+".css";
 

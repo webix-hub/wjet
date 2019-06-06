@@ -2,36 +2,39 @@ const c = require("./common");
 
 async function run(inq, viewName, type){
 	let menuItems = [];
-	let done;
-	while (done != true) {
+	while (true) {
 		const item = await inq.prompt([
-			{ type: 'confirm', name: 'add', message: 'Do you want to add menu item?', "default": true },
-			{ type: 'input', name: 'name', message: 'Menu item name', when: a => a.add },
-			{ type: 'input', name: 'url', message: 'View', when: a => a.add }
+			{ type: 'input', name: 'name', message: 'Item name' },
+			{ type: 'input', name: 'url', message: 'Related view' },
+			{ type: 'confirm', name: 'add', message: 'Add more items?', "default": true }
 		]);
 
-		if(item.add)
-			menuItems.push({value:item.name, id:item.url});
-		else
-			done = true;
+		menuItems.push({ value:item.name, id:item.url });
+		if(!item.add)
+			break;
 	}
 
 	let view;
 	let layout = type == "sidebar" ? `cols` : `rows`;
 
-	if(type == "top menu" || type == "sidebar"){
+	if(type == "top menu"){
 		let extra = type == "sidebar" ? `
-					width:250,
-					layout:"y"` : "";
+					width:250` : "";
 
-		view = `view:"menu",
-					data:${JSON.stringify(menuItems)},
-					select:true,
-					${extra}`;
+		view = `view:"segmented",
+					options:${JSON.stringify(menuItems, null, "\t")},
+					optionWidth:120
+					`;
 	}
-	else
+	else if(type == "sidebar"){
+		view = `view:"sidebar",
+					data:${JSON.stringify(menuItems, null, "\t")},
+					width:250
+					`;
+	} else
 		view = `view:"tabbar",
-					options:${JSON.stringify(menuItems)}`;
+					optionWidth:120,
+					options:${JSON.stringify(menuItems, null, "\t")}`;
 
 	view = `
 			${layout}:[

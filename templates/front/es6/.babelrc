@@ -1,12 +1,15 @@
 {
   "presets": [
-    ["env", {
+    ["@babel/preset-env", {
       "targets": {
-        "browsers": ["last 2 versions", "IE >= 11"]
+        "safari":   "11",
+        "firefox":  "60",
+        "chrome":   "70",
+        "ie":       "11",
+        "edge":     "17"
       },
       "modules":false,
       "loose":true
     }]
-  ],
-  "plugins": ["transform-object-rest-spread"]
+  ]
 }
