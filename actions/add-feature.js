@@ -54,6 +54,7 @@ async function run(inq){
 			]
 		};`);
 			c.addMarker("views/settings", "Settings", "langs,");
+			c.addFolder("sources/locales");
 			c.addFile("front/features/locale/en.js",
 					   "sources/locales/en")
 			c.addFile("front/features/locale/de.js",
