@@ -7,13 +7,13 @@ wjet => Webix Jet CLI tools
 
 ### How to install
 
-```
+```bash
 npm install -g wjet
 ```
 
 or 
 
-```
+```bash
 yarn global add wjet
 ```
 
@@ -21,7 +21,7 @@ yarn global add wjet
 
 - Create new app
 
-```
+```bash
 mkdir myApp
 cd myApp
 wjet init
@@ -29,13 +29,24 @@ wjet init
 
 - Add feature
 
-```
+```bash
 wjet add feature
 ```
 
 - Add widget
 
-```
+```bash
 wjet add widget
 ```
 
+- New view wizard
+
+```bash
+wjet add view
+```
+
+- New model wizard
+
+```bash
+wjet add model
+```
