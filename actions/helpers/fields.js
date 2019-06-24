@@ -1,6 +1,5 @@
 async function addFields(inq, type){
 	let fields = [];
-	let done;
 	while (true) {
 		const field = await inq.prompt([
 			{ type: 'input', name: 'name', message: 'Field name'},
@@ -12,7 +11,7 @@ async function addFields(inq, type){
 			{id: field.id, header: field.name, editor: "text", fillspace:true}:
 			{view:"text", name: field.id, label: field.name});
 
-		if (!done)
+		if (!field.add)
 			break;
 	}
 	return fields;
